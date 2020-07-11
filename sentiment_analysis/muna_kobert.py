@@ -9,6 +9,8 @@ from kobert.utils import get_tokenizer
 from kobert.pytorch_kobert import get_pytorch_kobert_model
 from transformers import AdamW
 from transformers import get_linear_schedule_with_warmup
+from google_drive_downloader import GoogleDriveDownloader as gdd
+import gdown
 
 
 class BERTDataset(Dataset):
@@ -190,6 +192,14 @@ class KoBERT:
         df.to_csv(result_file_name)
 
         print("## result file generated")
+
+    def download_model(self, model_file_name="trained"):
+        print("## Model download start ..")
+
+        url = 'https://drive.google.com/u/0/uc?export=download&confirm=WbK4&id=18mlpgwfNznsnviV-NxP7HpsurXKA6Lpv'
+        gdown.download(url, model_file_name, quiet=False)
+
+        print("## Model download done")
 
     def load_model(self, model_file_name):
         print("## Model loading..")
