@@ -1,5 +1,6 @@
 from sentiment_analysis import muna_kobert
 import torch
+import pandas as pd
 
 device = torch.device("cuda:0")
 kobert = muna_kobert.KoBERT(device)
@@ -10,6 +11,6 @@ kobert = muna_kobert.KoBERT(device)
 
 ### evaluate kobert model
 kobert.make_data_loader("custom_comment.txt", shuffle=False, no_label=True)
-kobert.download_model("trained")
+# kobert.download_model("trained")
 kobert.load_model("trained")
-kobert.predict("result2.csv")
+kobert.predict(result_file_name="result2.csv")

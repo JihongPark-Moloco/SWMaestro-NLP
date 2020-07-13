@@ -9,7 +9,6 @@ from kobert.utils import get_tokenizer
 from kobert.pytorch_kobert import get_pytorch_kobert_model
 from transformers import AdamW
 from transformers import get_linear_schedule_with_warmup
-from google_drive_downloader import GoogleDriveDownloader as gdd
 import gdown
 
 
@@ -102,8 +101,8 @@ class KoBERT:
 
     def calc_accuracy(self, X, Y):
         max_vals, max_indices = torch.max(X, 1)
-        train_acc = (max_indices == Y).sum().data.cpu().numpy() / max_indices.size()[0]
-        return train_acc
+        acc = (max_indices == Y).sum().data.cpu().numpy() / max_indices.size()[0]
+        return acc
 
     def train(self, warmup_ratio=0.1, num_epoch=5, max_grad_norm=1, log_interval=200, learning_rate=5e-5):
         print("## Preparing training...")
@@ -179,8 +178,8 @@ class KoBERT:
             return
 
         df = pd.DataFrame(columns=["flag"])
-
         self.model.eval()
+
         for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm(self.data_loader)):
             token_ids = token_ids.long().to(self.device)
             segment_ids = segment_ids.long().to(self.device)
