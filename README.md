@@ -23,7 +23,10 @@ https://github.com/SKTBrain/KoBERT#tokenizer
   _민진우, 나승훈, 신종훈, 김영길 (2019). RoBERTa를 이용한 한국어 자연어처리: 개체명 인식, 감성분석, 의존파싱. 한국정보과학회 학술발표논문집, 407-409_
   
 ## Files
-* **muna_kobert.py**  
+* movie_ranking_naver
+  네이버 영화 리뷰 클로러 및 분석기, KoBERT를 학습시키기 위한 데이터셋을 구축하는데 사용됩니다.
+
+* muna_kobert.py  
   Create Trend 프로젝트에 맞춰 최적화 시킨 KoBERT 모델, 또한 활요을 위해 패키징 해놓은 소스  
   
 * muna_kobert_test.py  
