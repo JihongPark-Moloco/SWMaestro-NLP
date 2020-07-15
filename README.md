@@ -1,4 +1,4 @@
-## Keyword Extraction
+# Keyword Extraction
 영상의 제목과 설명, 댓글을 입력받아 해당 영상이 가지는 키워드를 추출합니다.  
 _reference: https://github.com/lovit/KR-WordRank_
 ## What is WordRank
@@ -12,8 +12,10 @@ WordRank 는 substring graph 를 만든 뒤, graph ranking 알고리즘을 학�
 
 이렇게 구성된 subsrting graph 에 HITS 알고리즘을 적용하여 각 subsrting 의 ranking 을 계산합니다.
 
+
+
 *reference: https://lovit.github.io/nlp/2018/04/16/krwordrank*
-## Why WordRank / 
+## Why WordRank 
 유튜브의 경우에는 10대~30대 사이의 젊은 층의 점유율이 매우 높기에 은어와 신조어등에 대해 매우 민감하게 반응합니다.  
 키워드 추출에서 지도 학습으로 접근할 경우 새롭게 파생되고 변형되어지는 모든 키워드들에 대응하기란 불가능합니다.  
 그렇기에 비지도 학습 기반의 WordRank를 이용해 단어의 반복해서 나타나는 단어의 빈도수를 파악해 키워드를 추출합니다.  
