@@ -31,3 +31,6 @@ https://github.com/SKTBrain/KoBERT#tokenizer
   
 * muna_kobert_test.py  
   muna_kobert 패키지의 사용예시
+
+## Download All Project
+https://drive.google.com/file/d/1meRPQ4vf4GQDKdhze2v_cvX94-Ku61os/view?usp=sharing
