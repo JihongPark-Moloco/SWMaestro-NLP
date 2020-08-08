@@ -5,9 +5,14 @@ import traceback
 
 from krwordrank.word import KRWordRank
 
-
-# import keyword_extractor; ex = keyword_extractor.keyword_extractor(); ex.do(145873)
+# import keyword_extractor; ex = keyword_extractor.keyword_extractor(); ex.do(45503)
 # 19761
+
+IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
+
+
+# IP = "222.112.206.190"
+
 
 class keyword_extractor:
     do_sql = True
@@ -47,7 +52,7 @@ class keyword_extractor:
         return text.strip()
 
     # 댓글 입력시 키워드를 출력한다
-    def do_wr_keyword(self, video_name, video_description, comments, cur, video_idx):
+    def do_wr_keyword(self, video_name, video_description, comments, video_idx):
         min_count = 2  # 단어의 최소 출현 빈도수 (그래프 생성 시)
         max_length = 10  # 단어의 최대 길이
         wordrank_extractor = KRWordRank(min_count=min_count, max_length=max_length, verbose=False)
@@ -60,16 +65,21 @@ class keyword_extractor:
         # print(inputs)
         if len(inputs) <= 3:
             print('No Korean')
-            return
-        keywords, rank, graph = wordrank_extractor.extract(inputs, beta, max_iter)
-
+            return []
+        # print("inputs", inputs)
+        try:
+            keywords, rank, graph = wordrank_extractor.extract(inputs, beta, max_iter)
+        except ValueError:
+            return []
+        insert_list = []
         print("#### wordrank, 제목 및 설명 포함 키워드 목록 ####")
         for word, r in sorted(keywords.items(), key=lambda x: x[1], reverse=True):
             if word in video_name or word in video_description:
                 if self.do_sql:
                     if r > 1.0:
-                        cur.execute(
-                            f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
+                        insert_list.append(f"({video_idx}, '{word[:99]}'),")
+                        # cur.execute(
+                        #     f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
                 else:
                     print('%8s:\t%.4f' % (word, r))
 
@@ -77,28 +87,38 @@ class keyword_extractor:
 
         for word, r in sorted(keywords.items(), key=lambda x: x[1], reverse=True)[:10]:
             if self.do_sql:
-                cur.execute(
-                    f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
+                insert_list.append(f"({video_idx}, '{word[:99]}'),")
+                # cur.execute(
+                #     f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
             else:
                 print('%8s:\t%.4f' % (word, r))
 
-    def do_yake(self, video_name, video_description, comments, cur, video_idx):
+        return insert_list
+
+    def do_yake(self, video_name, video_description, comments, video_idx):
         text = " ".join([video_name, video_description, *comments])
         kw_extractor = yake.KeywordExtractor(n=1)
+        # print("text:", text)
+        if len(text.strip()) == 0:
+            return []
         keywords = kw_extractor.extract_keywords(text)
+        insert_list = []
         print("#### wordrank, 영어 키워드 목록 ####")
         for word, r in keywords:
             if self.do_sql:
                 if r <= 0.1:
-                    cur.execute(
-                        f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
+                    insert_list.append(f"({video_idx}, '{word[:99]}'),")
+                    # cur.execute(
+                    #     f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
             else:
                 print('%8s:\t%.4f' % (word, r))
+        return insert_list
 
     def do(self, video_idx):
         try:
-            conn = pg2.connect(database="createtrend", user="muna", password="muna112358!", host="222.112.206.190",
+            conn = pg2.connect(database="createtrend", user="muna", password="muna112358!", host=IP,
                                port="5432")
+            conn.autocommit = False
             cur = conn.cursor()
             cur.execute(f'SELECT idx, video_name, video_description FROM video WHERE idx={video_idx};')
             video_idx, video_name, video_description = cur.fetchall()[0]
@@ -112,13 +132,26 @@ class keyword_extractor:
             print("#### wordrank, 영상 설명에 포함된 키워드 ####")
             # print(exact_keys)
 
+            insert_1_list = self.do_wr_keyword(self.pre_kor(video_name), self.pre_kor(video_description), comments_kor,
+                                               video_idx)
+            insert_2_list = self.do_yake(self.pre_eng(video_name), self.pre_eng(video_description), comments_eng,
+                                         video_idx)
+
+            # print(type(insert_1_list))
+            # print(type(insert_2_list))
+
+            insert_list = insert_1_list + insert_2_list
+
             if self.do_sql:
                 for key in exact_keys:
-                    cur.execute(
-                        f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{key}') ON CONFLICT DO NOTHING")
+                    insert_list.append(f"({video_idx}, '{key[:99]}'),")
+                    # cur.execute(
+                    #     f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{key}') ON CONFLICT DO NOTHING")
 
-            self.do_wr_keyword(self.pre_kor(video_name), self.pre_kor(video_description), comments_kor, cur, video_idx)
-            self.do_yake(self.pre_eng(video_name), self.pre_eng(video_description), comments_eng, cur, video_idx)
+            if self.do_sql and len(insert_list) != 0:
+                sql = " ".join(["INSERT INTO video_keyword (video_idx, keyword) VALUES", "".join(insert_list)[:-1],
+                                "ON CONFLICT DO NOTHING"])
+                cur.execute(sql)
 
             if self.do_sql:
                 conn.commit()
