@@ -96,12 +96,13 @@ for channel_idxx in channel_list:
 
 cnp = np.array(channel_vector)
 np.save('channel_vector_10', cnp)
+cnp = np.load('channel_vector_10.npy')
 
 
-distances = distance.cdist([cnp[idx_to_index[3093]]], cnp, "cosine")[0]
+distances = distance.cdist([cnp[idx_to_index[499]]], cnp, "cosine")[0]
 ind = np.argpartition(distances, 10)[:10]
 for i in np.argpartition(distances, range(10))[:10]:
-    print(index_to_name[i])
+    print(index_to_name[i], distances[i])
 
 min_index = np.argmin(distances)
 min_distance = distances[min_index]
