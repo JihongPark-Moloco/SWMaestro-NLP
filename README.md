@@ -12,7 +12,7 @@ WordRank 는 substring graph 를 만든 뒤, graph ranking 알고리즘을 학�
 
 이렇게 구성된 subsrting graph 에 HITS 알고리즘을 적용하여 각 subsrting 의 ranking 을 계산합니다.
 
-![image](https://13.125.91.162/swmaestro/muna-1/raw/keyword_extractor/images/graph_wordrank_algorithm.png)  
+![image](https://13.125.91.162/swmaestro/muna-1/blob/master/images/graph_wordrank_algorithm.png)  
 
 *reference: https://lovit.github.io/nlp/2018/04/16/krwordrank*
 ## Why WordRank 
