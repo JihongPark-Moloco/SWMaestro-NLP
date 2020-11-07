@@ -1,24 +1,13 @@
+"""
+ElasticSearch에 키워드 조회 기능을 구현하기 위한 함수구현입니다.
+"""
+
 from elasticsearch import Elasticsearch
 
-es = Elasticsearch("http://www.thecreatetrend.com:9200/")  # 환경에 맞게 바꿀 것
-# es.info()
-# res = es.search(index='videos', body={
-#     "query": {
-#         "bool": {
-#             "must": [
-#                 {"term": {"videokeywordnews.keyword": "asmr"}},
-#                 {"term": {"videokeywordnews.keyword": "수면"}},
-#                 {"match": {"videokeywordnews.keyword": "팅글 하쁠리"}}
-#             ],
-#             "must_not": [
-#                 {"terms": {"videokeywordnews.keyword": ["입", "나무"]}}
-#             ]
-#         }
-#     }
-# })
-# advanced_do("팅글 하쁠리", "asmr 수면", "입 나무")
+es = Elasticsearch("http://www.thecreatetrend.com:9200/")
 
 # 예시 keyword_string: "롤 탑 강좌"
+# 롤, 탑, 강좌의 keyword를 포함하는 score가 높은 영상들
 def simple_do(keyword_string):
     res = es.search(index='videos', body={
         "query": {
@@ -31,6 +20,8 @@ def simple_do(keyword_string):
 
 
 # 예시 keyword_string: "롤 탑 강좌", must_keyword: "다리우스 티모", must_not_keyword: "정글 미드"
+# 다리우스와 티모가 들어가고 (and) 정글이나 미드가 들어가지 않는(or) 영상 중
+# 롤, 탑, 강좌의 keyword를 포함하는 score가 높은 영상들
 def advanced_do(keyword_string, must_keyword, must_not_keyword):
     body = {
         "query": {

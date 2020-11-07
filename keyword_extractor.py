@@ -1,3 +1,7 @@
+"""
+주어진 텍스르 리스트로부터 키워드 후보들을 추출해 DB에 저장합니다.
+"""
+
 import re
 import traceback
 
@@ -5,13 +9,7 @@ import psycopg2 as pg2
 import yake
 from krwordrank.word import KRWordRank
 
-# import keyword_extractor; ex = keyword_extractor.keyword_extractor(); ex.do(45503)
-# 19761
-
 IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
-
-
-# IP = "222.112.206.190"
 
 
 class keyword_extractor:
@@ -55,9 +53,7 @@ class keyword_extractor:
     def do_wr_keyword(self, video_name, video_description, comments, video_idx):
         min_count = 2  # 단어의 최소 출현 빈도수 (그래프 생성 시)
         max_length = 10  # 단어의 최대 길이
-        wordrank_extractor = KRWordRank(
-            min_count=min_count, max_length=max_length, verbose=False
-        )
+        wordrank_extractor = KRWordRank(min_count=min_count, max_length=max_length, verbose=False)
 
         beta = 0.85  # PageRank의 decaying factor beta
         max_iter = 10
@@ -115,11 +111,7 @@ class keyword_extractor:
     def do(self, video_idx):
         try:
             conn = pg2.connect(
-                database="createtrend",
-                user="muna",
-                password="muna112358!",
-                host=IP,
-                port="5432",
+                database="createtrend", user="muna", password="muna112358!", host=IP, port="5432",
             )
             conn.autocommit = False
             cur = conn.cursor()
@@ -127,44 +119,33 @@ class keyword_extractor:
                 f"SELECT idx, video_name, video_description FROM video WHERE idx={video_idx};"
             )
             video_idx, video_name, video_description = cur.fetchall()[0]
-            cur.execute(
-                f"SELECT comment_content FROM comment WHERE video_idx={video_idx};"
-            )
+            cur.execute(f"SELECT comment_content FROM comment WHERE video_idx={video_idx};")
             comments = cur.fetchall()
 
             comments_kor = [self.pre_kor(c[0]) for c in comments]
             comments_eng = [self.pre_eng(c[0]) for c in comments]
 
             exact_keys = [
-                keyword[1:]
-                for keyword in re.findall("#[ㄱ-ㅣ가-힣a-zA-Z0-9]+", video_description)
+                keyword[1:] for keyword in re.findall("#[ㄱ-ㅣ가-힣a-zA-Z0-9]+", video_description)
             ]
             print("#### wordrank, 영상 설명에 포함된 키워드 ####")
             print(exact_keys)
 
             insert_1_list = self.do_wr_keyword(
-                self.pre_kor(video_name),
-                self.pre_kor(video_description),
-                comments_kor,
-                video_idx,
+                self.pre_kor(video_name), self.pre_kor(video_description), comments_kor, video_idx,
             )
             insert_2_list = self.do_yake(
-                self.pre_eng(video_name),
-                self.pre_eng(video_description),
-                comments_eng,
-                video_idx,
+                self.pre_eng(video_name), self.pre_eng(video_description), comments_eng, video_idx,
             )
-
-            # print(type(insert_1_list))
-            # print(type(insert_2_list))
 
             insert_list = insert_1_list + insert_2_list
 
             if self.do_sql:
                 for key in exact_keys:
                     insert_list.append(f"({video_idx}, '{key[:99]}'),")
-                    # cur.execute(
-                    #     f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{key}') ON CONFLICT DO NOTHING")
+                    cur.execute(
+                        f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{key}') ON CONFLICT DO NOTHING"
+                    )
 
             if self.do_sql and len(insert_list) != 0:
                 sql = " ".join(

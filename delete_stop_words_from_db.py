@@ -1,3 +1,7 @@
+"""
+DB에서 불용어 목록으로 지정된 키워드들을 제거합니다.
+"""
+
 import psycopg2 as pg2
 import pandas as pd
 
