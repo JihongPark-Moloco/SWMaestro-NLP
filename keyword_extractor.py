@@ -102,8 +102,6 @@ class keyword_extractor:
             if self.do_sql:
                 if r <= 0.1:
                     insert_list.append(f"({video_idx}, '{word[:99]}'),")
-                    # cur.execute(
-                    #     f"INSERT INTO video_keyword (video_idx, keyword) VALUES ({video_idx}, '{word}') ON CONFLICT DO NOTHING")
             else:
                 print("%8s:\t%.4f" % (word, r))
         return insert_list
