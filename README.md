@@ -104,3 +104,6 @@ FastText는 Facebook AI 연구소에서 제작한 N-gram 방식의 단어 임베
 FastText를 통해 영상으로부터 추출한 키워드를 학습시켜 단어를 fasttext 공간에 나타내고 채널별로 빈도수가 높게 나타나는
 단어들의 임베딩 값을 통해 해당 채널의 좌푯값을 fasttext 공간 위에 특정합니다.
 모든 채널을 fasttext 공간위의 특정짓고 나면 이후 cosine similarity 방식을 통해 유사한 채널을 계산할 수 있습니다.
+
+## Authors
+- **박지홍(qkrwlghddlek@naver.com)**
