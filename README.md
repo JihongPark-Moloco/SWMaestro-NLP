@@ -99,7 +99,7 @@ YAKE는 Unsupervised 방식의 경량 키워드 추출기로
 우리 시스템은 특정 문서 집합에 대해 훈련될 필요가 없으며, 사전, 외부 장식물, 텍스트 크기, 언어 또는 도메인에 따라 달라지지 않는다.
 
 ### FastText
-![fasttext_vector_field](/uploads/e9833ac68a57ac446e48808d024b4b37/fasttext_vector_field.png)
+![fasttext_vector_field](/uploads/e9833ac68a57ac446e48808d024b4b37/fasttext_vector_field.png)  
 FastText는 Facebook AI 연구소에서 제작한 N-gram 방식의 단어 임베딩 및 텍스트 분류 학습 라이브러리입니다.
 FastText를 통해 영상으로부터 추출한 키워드를 학습시켜 단어를 fasttext 공간에 나타내고 채널별로 빈도수가 높게 나타나는
 단어들의 임베딩 값을 통해 해당 채널의 좌푯값을 fasttext 공간 위에 특정합니다.
