@@ -1,5 +1,5 @@
 # NLP Repository
-![영산 컨텐츠 키워드 추출 기법](/uploads/4707fe5fae802bf5bd40cbff71439477/image.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809147-384ac100-2b85-11eb-91a8-c7c32c54072e.png)  
 MUNA 팀의 CreateTrend 프로젝트에서 자연어처리 관련 동작을 수집한 레포입니다.  
 유튜브 영상의 컨텐츠 키워드를 추출하는 기능을 수행합니다.
 
@@ -11,14 +11,14 @@ MUNA 팀의 CreateTrend 프로젝트에서 자연어처리 관련 동작을 수�
 * [FastText](https://github.com/facebookresearch/fastText)
 
 ### PipeLine
-![컨텐츠_키워드_추출_프로세스](/uploads/2b72ee89675aa8db244a5e6146949050/컨텐츠_키워드_추출_프로세스.png)
+![image](https://user-images.githubusercontent.com/50457791/99809161-3bde4800-2b85-11eb-8207-9be425bd7bfe.png)  
 1. GCP Vision API를 이용해 썸네일에서 글귀를 분리해냅니다.
 2. 제목 설명 댓글에서 KR-WordRank와 YAKE를 이용해 키워드 후보를 추출합니다.
 3. 2번에서 추출한 키워드 후보와 영상 태그를 모두 FastText로 임베딩합니다.  
   이후 HDBScan을 이용해 키워드를 압축하고 DB에 저장합니다.
 
 ### Why FastText
-![유튜브 비정형 댓글들](/uploads/e65a01e5e84cf282563783a6d51dc782/화면_캡처_2020-11-08_144803.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809167-3e40a200-2b85-11eb-982a-d5e902bb8e50.png)  
 유튜브 커뮤티니 특성상 비문법적이고 비정형적인 은어들 위주의 댓글이 많이 분포합니다.  
 substring의 빈도수를 기반으로 키워드를 추출하는 알고리즘 특성상 데이터셋이 부족할경우 조사를 함께 키워드로 인식합니다.  
 조사를 제거하기 위해 형태소 분석기를 사용할 경우 신조어를 모두 인식할 수 없는 문제가 존재합니다.  
@@ -27,8 +27,8 @@ N-Gram 방식의 임베딩은 단어를 여러 단어로 나누어서 인식하�
 
 ## 컨텐츠 키워드 추출
 ### GCP Vision API OCR
-![GCP OCR 예시](/uploads/c1b86712d9c9c1b922fccd12e73bc278/화면_캡처_2020-11-08_145424.png)  
-![OCR 입력 예시 및 성능 검증](/uploads/e5f0dd505b9b0bb528325e2d0ace47cf/화면_캡처_2020-11-08_145801.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809173-40a2fc00-2b85-11eb-95d5-3629ab658d76.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809177-426cbf80-2b85-11eb-927a-50e6bccfaa54.png)  
 GCP의 Vision API중 OCR 항목을 이용해 유튜브 썸네일에 포함된 글귀를 추출합니다.  
 이때 API 비용을 최적화 하기 위해 Document를 분석하였고 해상도와 용량 제한만이 존재함을 확인했습니다.  
 이를 이용해 다수의 썸네일을 이어붙여 하나의 입력으로 활용하고 이를 인식된 키워드를 좌표로 다시 썸네일별로 나누어 DB에 저장합니다.  
@@ -37,14 +37,14 @@ GCP의 Vision API중 OCR 항목을 이용해 유튜브 썸네일에 포함된 �
 이를 통해 GCP OCR API의 비용을 최적화했습니다.  
 
 ### 후보 키워드 추출
-![후보 키워드 추출](/uploads/e3c902c2a651cb896eb34c79aa7534c5/화면_캡처_2020-11-08_150236.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809185-44cf1980-2b85-11eb-9c79-f0366d6b950b.png)  
 영상 제목, 설명, 댓글, 썸네일 글귀로부터 후보 키워드를 추출합니다.  
 추출에는 한글은 KR-WordRank, 영어는 YAKE를 사용합니다.  
 
 
 ### 키워드 압축
-![유사 키워드 예시](/uploads/b2edc2b929c36c755a3f1cc4c4a89635/화면_캡처_2020-11-08_150527.png)  
-![키워드 압축 예시](/uploads/175fe6857aece2c5d87a0ee5f1f9d5f6/image.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809196-47317380-2b85-11eb-92e5-892d0bf10d6b.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809203-4993cd80-2b85-11eb-89f4-7f608103429c.png)  
 추출한 후보 키워드와 영상 태그를 결합하기에 중복되는 태그와 축약형, 영어 등의 유사한 키워드가 섞여서 결과로 나오게됩니다.  
 유사 키워드를 하나의 단어로 압축하기위해 FastText로 임베딩한 값을 HDBScan으로 클러스터링하며 군집화된 키워드의 경우  
 해당 군집의 대표 키워드를 선정해 키워드를 압축합니다.
@@ -81,7 +81,7 @@ Substring graph 는 아래 그림의 (a), (b) 처럼 구성됩니다.
 왼쪽에 위치한 subsrting 과 오른쪽에 위치한 subsrting 의 edge 는 서로 다른 종류로 표시합니다.
 이때, ‘do’ 역시 ‘that’의 오른쪽에 등장하였으므로 링크를 추가합니다.
 이렇게 구성된 subsrting graph 에 HITS 알고리즘을 적용하여 각 subsrting 의 ranking 을 계산합니다.
-![image](https://13.125.91.162/swmaestro/muna-1/raw/master/images/graph_wordrank_algorithm.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809213-4bf62780-2b85-11eb-83c5-19b3d717e909.png)  
 
 유튜브의 경우에는 10대~30대 사이의 젊은 층의 점유율이 매우 높기에 은어와 신조어등에 대해 매우 민감하게 반응합니다.
 키워드 추출에서 지도 학습으로 접근할 경우 새롭게 파생되고 변형되어지는 모든 키워드들에 대응하기란 불가능합니다.
@@ -91,7 +91,7 @@ WordRank를 이용할 시 통계에 기반하여 키워드를 추출하기에 �
 
 ### YAKE
 Unsupervised 방식의 텍스트 기반 자동 키워드 추출.
-![YAKE](/uploads/f7be42ab813beb34439f227eea384677/image.png)
+![image](https://user-images.githubusercontent.com/50457791/99809221-4e588180-2b85-11eb-99c1-1d23fbd94a4e.png)  
 YAKE는 Unsupervised 방식의 경량 키워드 추출기로
 단일 문서에서 추출한 텍스트 통계를 바탕으로 텍스트의 가장 중요한 키워드를 선택한다.
 통계 방식에 기반하기 때문에 특정 문석 집합에 대해 훈련될 필요가 없으며, 사전, 텍스트 길이, 언어와 도메인에 따라 달라지지 않습니다.
@@ -99,7 +99,7 @@ YAKE는 Unsupervised 방식의 경량 키워드 추출기로
 우리 시스템은 특정 문서 집합에 대해 훈련될 필요가 없으며, 사전, 외부 장식물, 텍스트 크기, 언어 또는 도메인에 따라 달라지지 않는다.
 
 ### FastText
-![fasttext_vector_field](/uploads/e9833ac68a57ac446e48808d024b4b37/fasttext_vector_field.png)  
+![image](https://user-images.githubusercontent.com/50457791/99809228-50224500-2b85-11eb-9b32-de9b3bc308a7.png)  
 FastText는 Facebook AI 연구소에서 제작한 N-gram 방식의 단어 임베딩 및 텍스트 분류 학습 라이브러리입니다.
 FastText를 통해 영상으로부터 추출한 키워드를 학습시켜 단어를 fasttext 공간에 나타내고 채널별로 빈도수가 높게 나타나는
 단어들의 임베딩 값을 통해 해당 채널의 좌푯값을 fasttext 공간 위에 특정합니다.
