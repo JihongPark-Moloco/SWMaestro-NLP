@@ -9,7 +9,7 @@ import psycopg2 as pg2
 import yake
 from krwordrank.word import KRWordRank
 
-IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
+IP = #IP
 
 
 class keyword_extractor:
@@ -107,9 +107,13 @@ class keyword_extractor:
         return insert_list
 
     def do(self, video_idx):
+        database = #database
+        user = #user
+        password = #password
+        
         try:
             conn = pg2.connect(
-                database="createtrend", user="muna", password="muna112358!", host=IP, port="5432",
+                database=database, user=user, password=password, host=IP, port="5432",
             )
             conn.autocommit = False
             cur = conn.cursor()
