@@ -15,7 +15,7 @@ from gensim import models
 from scipy.spatial import distance
 
 ## 추가 학습 시키는 소스
-# IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
+# IP = IP
 # video_keyword = pd.read_csv(r'D:\createtrend_public_video_keyword.csv')
 ko_model = models.fasttext.load_facebook_model(r"D:\share\wiki.ko.bin")
 
@@ -49,7 +49,6 @@ ko_model.train(new_data, total_examples=len(new_data), epochs=ko_model.epochs)
 ko_model.save("new_model")
 
 ############ model 구현 소스 ###########
-IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
 ko_model = models.fasttext.FastText.load("0908_model")
 
 conn = pg2.connect(
