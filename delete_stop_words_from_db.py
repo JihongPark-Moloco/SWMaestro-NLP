@@ -5,9 +5,15 @@ DB에서 불용어 목록으로 지정된 키워드들을 제거합니다.
 import psycopg2 as pg2
 import pandas as pd
 
-IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
+IP = # IP
+database = #database
+user = #user
+password = #password
 
-conn = pg2.connect(database="createtrend", user="muna", password="muna112358!", host=IP,
+conn = pg2.connect(database=database,
+                   user=user,
+                   password=password,
+                   host=IP,
                    port="5432")
 conn.autocommit = False
 cur = conn.cursor()
