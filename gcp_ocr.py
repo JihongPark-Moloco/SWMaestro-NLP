@@ -12,6 +12,10 @@ import requests
 import tqdm
 from PIL import Image
 
+database = #database
+user = #user
+password = #password
+host = #host
 
 def detect_text(content):
     """Detects text in the file."""
@@ -76,10 +80,10 @@ def get_image_from_url(url):
 # 이미지를 합쳐서 OCR API를 요청하고 이를 다시 나누어 DB에 저장합니다.
 while True:
     conn = pg2.connect(
-        database="createtrend",
-        user="muna",
-        password="muna112358!",
-        host="ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com",
+        database=database,
+        user=user,
+        password=password,
+        host=host,
         port="5432",
     )
     cur = conn.cursor()
