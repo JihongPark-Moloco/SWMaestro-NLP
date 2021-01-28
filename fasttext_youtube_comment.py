@@ -21,14 +21,17 @@ def pre(text):
     return text.strip()
 
 
-IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
+IP = #IP
+database = #database
+user = #user
+password = #password
 
 ko_model = models.fasttext.load_facebook_model(r"D:\share\wiki.ko.bin")
 
 new_data = []
 
 conn = pg2.connect(
-    database="createtrend", user="muna", password="muna112358!", host=IP, port="5432"
+    database=database, user=user, password=password, host=IP, port="5432"
 )
 conn.autocommit = False
 cur = conn.cursor()
