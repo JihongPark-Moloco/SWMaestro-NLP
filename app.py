@@ -8,10 +8,15 @@ import keyword_extractor
 
 ex = keyword_extractor.keyword_extractor()
 
-credentials = pika.PlainCredentials("muna", "muna112358!")
+id = #id
+pw = #pw
+ip = #ip
+port = #port
+
+credentials = pika.PlainCredentials(id, pw)
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
-        "13.124.107.195", 5672, "/", credentials, heartbeat=0, blocked_connection_timeout=None
+        ip, port, "/", credentials, heartbeat=0, blocked_connection_timeout=None
     )
 )
 channel = connection.channel()
