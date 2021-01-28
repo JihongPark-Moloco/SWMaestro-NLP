@@ -12,9 +12,13 @@ from tqdm import tqdm
 
 ko_model = models.fasttext.FastText.load("0908_model")
 
-IP = "ec2-13-124-107-195.ap-northeast-2.compute.amazonaws.com"
+IP = #IP
+database = #database
+user = #user
+password = #password
+
 conn = pg2.connect(
-    database="createtrend", user="muna", password="muna112358!", host=IP, port="5432"
+    database=database, user=user, password=password, host=IP, port="5432"
 )
 cur = conn.cursor()
 cur.execute(
